@@ -1,0 +1,16 @@
+<template>
+    <div>
+        InventoryRecords   
+    </div>
+</template>
+
+<script>
+export default {
+    name:'InventoryRecords'
+}
+</script>
+
+<style lang="scss" scoped>
+    
+</style>
+

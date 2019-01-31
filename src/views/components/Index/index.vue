@@ -1,0 +1,246 @@
+<template>
+    <div class="index">
+        <el-row    class="statistical">
+            <el-col :span="4" class="model"> 
+                <div>
+                    <p class="title">入库总数</p>
+                    <p class="num">126,560</p>
+                </div>
+            </el-col>
+            <el-col :span="4" :offset="1" class="model">
+                <div>
+                    <p class="title">已注册总数</p>
+                    <p class="num">5,000</p>
+                </div>
+            </el-col>
+            <el-col :span="4" :offset="1" class="model">
+                <div>
+                    <p class="title">已办卡数</p>
+                    <p class="num">2,560</p>
+                </div>
+            </el-col>
+            <el-col :span="4" :offset="1" class="model">
+                <div>
+                    <p class="title">奖励总数</p>
+                    <p class="num">8,560.00</p>
+                </div>
+            </el-col>
+            <el-col :span="4" :offset="1" class="model">
+                <div>
+                    <p class="title">可提现金额</p>
+                    <p class="num">6,560.00</p>
+                </div>
+            </el-col>
+        </el-row>
+        <el-row type="flex" class="charts" justify="space-around">
+            <el-col :span="24" class="chartsCont">
+                <p>折线图</p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <el-date-picker
+                    v-model="monthTime"
+                    type="month"
+                    value-format='yyyy-MM'
+                    @change="selectMounth"
+                    placeholder="选择月">
+                </el-date-picker>
+            </el-col>
+        </el-row>
+        <el-row class="charts echarts">
+            <div class="kind">
+                <p>选择类型:<input name="kind" type="radio" id="registered"><label for="registered">注册数</label><input type="radio" name="kind" id="card"><label for="card">办卡数</label><input name="kind" id="money" type="radio"><label for="money">奖励金额</label></p>
+            </div>  <div id="myChart" :style="{width: '100%', height: '400px'}"></div>
+        </el-row>
+        <el-row class="banner">
+
+            <el-carousel :interval="5000">
+                <el-carousel-item class="card" height='200px' v-for="item in 4" :key="item">
+                    <div v-for="item of 5" class="province" :key="item">
+                        <div class="txt">
+                            <p>省代一</p>
+                            <p>办卡率</p>
+                            <p>82%</p>
+                        </div>
+                        <div>
+                            <el-progress :width="100" :stroke-width="10" type="circle" :percentage="82"></el-progress>
+                        </div>
+                    </div>
+                    
+                </el-carousel-item>
+            </el-carousel>
+        </el-row>
+    </div>
+</template>
+
+<script>
+export default {
+    name:'Index',
+    data(){
+        return{
+            monthTime:'',
+            dd:[],
+            begin:'',
+            end:'',
+            days:[],
+            year:'',
+            mounth:''
+        }
+    },
+    methods:{
+        selectMounth(val){
+            //选择查询时间
+            if(val){
+                this.memberTime=val
+                let arr=val.split('-')
+                this.year=Number(arr[0])
+                this.mounth=Number(arr[1])
+                this.getDaysOfMonth(Number(arr[0]),Number(arr[1]))
+                this.drawLine()
+            }
+        },
+        drawLine(){
+            // 基于准备好的dom，初始化echarts实例
+            let myChart = this.$echarts.init(document.getElementById('myChart'))
+            // 绘制图表
+            myChart.setOption({
+                title:{
+                	text:this.year+'年'+this.mounth+"月 "+'注册总数为--'+'66666',
+                	left:'center',
+                	textStyle:{//标题内容的样式
+                		fontStyle:'normal',//主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
+                		fontWeight:"normal",//可选normal(正常)，bold(加粗)，bolder(加粗)，lighter(变细)，100|200|300|400|500...
+                        fontSize:18,//主题文字字体大小，默认为18px
+                        
+                	}
+                },
+                grid: {
+                    top:'12%'
+                },
+                tooltip: {},
+                xAxis: {
+                    data: this.dd
+                },
+                yAxis: {
+//		            	data:[1000,2000,4000,6000,8000,10000,15000,20000]
+                },
+                series: [{
+                    name: '注册总数',
+                    type: 'line',
+                    data: ['1','22','23','346','5678'],
+                    color:'green'
+                }]
+            });
+        },
+        getDaysOfMonth(year,month){
+            //当前月份天数
+            this.dd=[]
+            this.days=[]
+            var date=new Date(year,month,0);
+            var days=date.getDate();
+            let f = (length) => Array.from({length}).map((v,k) => k);
+            this.days=f(days+1)
+            let arr=this.days.filter(item=>{
+                item=item.toString()+"号"
+                if(item!='0号'){
+                    this.dd.push(item)
+                }
+                
+            })
+            this.days=this.days.splice(1)
+            this.drawLine()
+        },
+        getDays(){
+            //首先查询当前月份
+            let date=new Date()
+            let dateY=date.getFullYear()
+            let dateM=date.getMonth()+1
+            this.year=dateY
+            this.mounth=dateM
+            if(dateM<10){
+                dateM='0'+dateM
+            }
+            this.monthTime=dateY+'-'+dateM
+        }
+    },
+    mounted(){
+        this.drawLine();
+        this.getDays();
+        this.getDaysOfMonth(this.year,this.mounth);
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+    .statistical{
+        background: transparent !important;
+        margin-bottom: 10px;
+        padding-right: 30px;
+        .model{
+            background: white;
+            border: 1px solid #e5e5e5;
+            div{
+                padding-left: 15%;
+                padding-top: 10%;
+                box-sizing: border-box;
+                height: 110px;
+                .title{
+                    font-size: 14px;
+                    margin-bottom: 10px;
+                    color:gray;
+                }
+                .num{
+                   color: black;
+                   font-size: 30px;
+                   font-family: 'Arial Normal', 'Arial';
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+    .charts{
+        background: transparent !important;
+        .chartsCont{
+            display: flex;
+            background: white;
+            align-items: center;
+            font-weight: bold;
+            height: 50px;
+            justify-content: space-around;
+            // padding: 0 20px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+    }
+    .echarts{
+        background: white !important;
+        .kind{
+            margin-top: 20px;
+            input{
+                margin-left: 20px;
+            }
+            margin-left: 10%;
+        }
+    }
+    .banner{
+        background: white;
+        margin: 10px;
+        padding-right: 5%;
+        .card{
+            padding-left: 5%;
+            display: flex;
+            .province{
+                display: flex;
+                width: 30vh;
+                // border-right: 1px solid gray;
+                justify-content: center;
+                align-items: center;
+                height: 200px;
+                .txt{
+                    line-height: 30px;
+                    margin-right: 20px;
+                }
+            }
+        }
+    }
+</style>
+

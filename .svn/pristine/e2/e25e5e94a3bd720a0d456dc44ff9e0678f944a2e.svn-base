@@ -1,0 +1,16 @@
+<template>
+    <div>
+        OutboundRecords   
+    </div>
+</template>
+
+<script>
+export default {
+    name:'OutboundRecords'
+}
+</script>
+
+<style lang="scss" scoped>
+    
+</style>
+

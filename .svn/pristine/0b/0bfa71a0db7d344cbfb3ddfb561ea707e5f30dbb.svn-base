@@ -1,0 +1,16 @@
+<template>
+    <div>
+        RecyclingRecords   
+    </div>
+</template>
+
+<script>
+export default {
+    name:'RecyclingRecords'
+}
+</script>
+
+<style lang="scss" scoped>
+    
+</style>
+

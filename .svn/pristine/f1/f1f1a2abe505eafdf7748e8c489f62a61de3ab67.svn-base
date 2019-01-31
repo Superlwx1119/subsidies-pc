@@ -1,0 +1,16 @@
+<template>
+    <div>
+        GoodsStatistics   
+    </div>
+</template>
+
+<script>
+export default {
+    name:'GoodsStatistics'
+}
+</script>
+
+<style lang="scss" scoped>
+    
+</style>
+
